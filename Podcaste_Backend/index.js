@@ -3,11 +3,10 @@ const mdb = require("mongoose");
 const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
 const cors = require('cors');
-app.use(cors());
 const Signup = require("./Models/SignUpSchema");
-
 const app = express();
 const port = 3001;
+app.use(cors());
 dotenv.config();
 
 app.use(express.json());
