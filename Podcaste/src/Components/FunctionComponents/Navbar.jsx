@@ -8,7 +8,7 @@ function Navbar() {
   return (
     <div className="container">
       <nav className="navbar">
-        <div className="logo"><a href="/pod" className="atag">PODCASTS</a></div>
+        <div className="logo"><a href="/Home" className="atag">PODCASTS</a></div>
 
         <div className="searchbar">
           <input type="text" placeholder="SEARCH..." className="search-input" />
