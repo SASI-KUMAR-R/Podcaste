@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import "../CSS/Detail.css";
 import Player from "./AudioPlayer";
-
+import Navbar from "./Navbar";
 // Data for different podcasts
 const podcastData = {
   1: {
@@ -82,7 +82,9 @@ function Detail() {
   const podcast = podcastData[id] || podcastData[1]; // Default if invalid ID
 
   return (
-    <div className="mainproject">
+    <div>
+      <Navbar/>
+      <div className="mainproject">
       <div className="project1">
         <img src={podcast.image} alt={podcast.title} />
         <h1 className="h1tagdirect">{podcast.title}</h1>
@@ -96,6 +98,7 @@ function Detail() {
         </p>
       </div>
       <Player src={podcast.audio} />
+    </div>
     </div>
   );
 }

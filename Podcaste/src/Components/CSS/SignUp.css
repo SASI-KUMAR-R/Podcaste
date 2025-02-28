@@ -1,3 +1,8 @@
+.Maindiv{
+    position: relative;
+    top: 50px;
+    right: 250px;
+}
 .maindiv{
     margin: 50px auto;
     padding: 50px;

@@ -8,7 +8,7 @@ function Navbar() {
   return (
     <div className="container">
       <nav className="navbar">
-        <div className="logo"><a href="/" className="atag">PODCASTS</a></div>
+        <div className="logo"><a href="/pod" className="atag">PODCASTS</a></div>
 
         <div className="searchbar">
           <input type="text" placeholder="SEARCH..." className="search-input" />
@@ -20,9 +20,9 @@ function Navbar() {
           </button>
           <button
             className="buttonstyle2"
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/")}
           >
-            <ShinyText text="GET STARTED" disabled={false} speed={3} className='custom-class' />
+            <ShinyText text="LOG OUT" disabled={false} speed={3} className='custom-class' />
           </button>
         </div>
       </nav>

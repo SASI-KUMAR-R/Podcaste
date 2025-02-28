@@ -10,11 +10,10 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-        <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/pod" element={<Pod />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/announ" element={<ANNOUNCEMENT />} />
