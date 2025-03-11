@@ -13,7 +13,13 @@ function Home() {
         <h2>
           GO TO{" "}
           <Link to="/pod" className="TAGA">
-            LIBRARY
+            GLOBAL LIBRARY
+          </Link>
+        </h2>
+        <h2>
+          GO TO{" "}
+          <Link to="/pod" className="TAGA">
+            YOUR LIBRARY
           </Link>
         </h2>
       </div>

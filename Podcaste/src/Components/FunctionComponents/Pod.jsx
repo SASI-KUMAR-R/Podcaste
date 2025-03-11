@@ -1,80 +1,39 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import "../CSS/Pod.css";
 import Navbar from "./Navbar";
+import podcastData from "../JSON/DetailApi.json";
+
 function Pod() {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  const filteredPodcasts = Object.keys(podcastData).filter((key) => {
+    const podcast = podcastData[key];
+    return podcast.title.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   const handledetailpage = (id) => {
     navigate(`/detail/${id}`);
   };
-  const handleNavigation = () => {
-    navigate("/announ");
-  };
 
   return (
     <div>
-        <Navbar/>
+      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> {/* Pass state */}
       <div className="main">
-        <div className="audio">
-          <img
-            src="IMAGE/img1.jpg"
-            alt=""
-            onClick={() => handledetailpage(1)}
-          />
-          <h2>SQUARE FLYER</h2>
-        </div>
-        <div className="audio">
-          <img
-            src="IMAGE/img9.jpeg"
-            alt=""
-            onClick={() => handledetailpage(2)}
-          />
-          <h2>PASSION POD</h2>
-        </div>
-        <div className="audio">
-          <img
-            src="IMAGE/img3.jpg"
-            alt=""
-            onClick={() => handledetailpage(3)}
-          />
-          <h2>BRIGHT FUTURE POD</h2>
-        </div>
-        <div className="audio">
-          <img
-            src="IMAGE/img4.jpeg"
-            alt=""
-            onClick={() => handledetailpage(4)}
-          />
-          <h2>AIR?</h2>
-        </div>
-        <div className="audio">
-          <img
-            src="IMAGE/img5.jpeg"
-            alt=""
-            onClick={() => handledetailpage(5)}
-          />
-          <h2>PoDcAsTe</h2>
-        </div>
-        <div className="audio">
-          <img
-            src="IMAGE/img6.jpeg"
-            alt=""
-            onClick={() => handledetailpage(6)}
-          />
-          <h2>HIDDEN PABLO</h2>
-        </div>
-        <div className="audio">
-          <img
-            src="IMAGE/img8.jpeg"
-            alt=""
-            onClick={() => handledetailpage(7)}
-          />
-          <h2>MONEY TALK</h2>
-        </div>
-        <div className="audio">
-          <img src="IMAGE/img10.jpg" alt="" onClick={handleNavigation} />
-          <h2>IMPORTANT ANNOUNCEMENT</h2>
-        </div>
+        {filteredPodcasts.length > 0 ? (
+          filteredPodcasts.map((key) => {
+            const podcast = podcastData[key];
+            return (
+              <div className="audio" key={key}>
+                <img src={podcast.image} alt={podcast.title} onClick={() => handledetailpage(key)} />
+                <h2>{podcast.title}</h2>
+              </div>
+            );
+          })
+        ) : (
+          <p>No results found.</p>
+        )}
       </div>
     </div>
   );
