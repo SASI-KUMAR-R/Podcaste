@@ -126,6 +126,7 @@ app.get("/getUserPodcasts/:userId", async (req, res) => {
 });
 
 
+
 // ---------------- GET ALL PODCASTS (GLOBAL LIBRARY) ----------------
 app.get("/getAllPodcasts", async (req, res) => {
   try {

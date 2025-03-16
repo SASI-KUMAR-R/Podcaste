@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Navbar";
-import { useUser } from "../FunctionComponents/UserContext"; // Import user context
+import { useUser } from "../FunctionComponents/UserContext";
 import "../CSS/YourLibraryHome.css";
 
 function YourLibraryHome() {
@@ -15,7 +15,6 @@ function YourLibraryHome() {
 
   useEffect(() => {
     const fetchUserPodcasts = async () => {
-      // ✅ Debugging log to check if user ID exists
       console.log("User ID from context:", user?.userid);
 
       if (!user?.userid) {
@@ -28,8 +27,13 @@ function YourLibraryHome() {
         const response = await axios.get(
           `https://test-podcast.onrender.com/getUserPodcasts/${user.userid}`
         );
-        setPodcasts(response.data);
-        setError(""); // Clear error if request is successful
+
+        if (response.data.length === 0) {
+          setError("You haven't added any podcasts yet.");
+        } else {
+          setPodcasts(response.data);
+          setError("");
+        }
       } catch (error) {
         console.error("Error fetching user podcasts:", error);
         setError("Failed to fetch your podcasts. Please try again later.");
@@ -39,9 +43,8 @@ function YourLibraryHome() {
     };
 
     fetchUserPodcasts();
-  }, [user?.userid]); // ✅ Added correct dependency to avoid unnecessary calls
+  }, [user?.userid]);
 
-  // ✅ Filter podcasts based on search
   const filteredPodcasts = podcasts.filter((podcast) =>
     podcast.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -52,7 +55,7 @@ function YourLibraryHome() {
 
   return (
     <div>
-      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> {/* ✅ Pass search props */}
+      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <div className="MAINDIVOFPOD">
         <div className="addpodcast">
           <h1>
@@ -72,13 +75,17 @@ function YourLibraryHome() {
         {loading ? (
           <p>Loading podcasts...</p>
         ) : error ? (
-          <p className="error-message">{error}</p> // ✅ Show error message
-        ) : podcasts.length > 0 ? (
+          <p className="error-message">{error}</p>
+        ) : (
           <div className="main">
             {filteredPodcasts.map((podcast) => (
-              <div className="audio" key={podcast._id} onClick={() => handleDetailPage(podcast._id)}>
+              <div
+                className="audio"
+                key={podcast._id}
+                onClick={() => handleDetailPage(podcast._id)}
+              >
                 <img
-                  src={`data:image/png;base64,${podcast.image}`}
+                  src={podcast.image.startsWith("data:image") ? podcast.image : `data:image/png;base64,${podcast.image}`}
                   alt={podcast.title}
                 />
                 <h2>{podcast.title}</h2>
@@ -87,8 +94,6 @@ function YourLibraryHome() {
               </div>
             ))}
           </div>
-        ) : (
-          <p>You haven't added any podcasts yet.</p>
         )}
       </div>
     </div>
