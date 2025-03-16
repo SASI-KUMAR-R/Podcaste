@@ -101,46 +101,28 @@ app.post(
   }
 );
 
-// ---------------- GET USER PODCASTS ----------------
-app.get("/getUserPodcasts/:userId", async (req, res) => {
+// ---------------- FETCH USER PODCASTS ROUTE ----------------
+app.get("/mypodcasts/:userid", async (req, res) => {
   try {
-    const { userId } = req.params;
-    
-    console.log("Received API request for user ID:", userId); // Debugging log
-
-    if (!userId) {
-      console.log("No user ID received");
-      return res.status(400).json({ message: "User ID is required" });
+    const { userid } = req.params;
+    if (!userid) {
+      return res.status(400).json({ message: "User ID is required", success: false });
     }
 
-    const podcasts = await Podcast.find({ userid: userId });
+    const podcasts = await Podcast.find({ userid });
 
-    if (podcasts.length === 0) {
-      console.log(`No podcasts found for user: ${userId}`);
-      return res.status(404).json({ message: "No podcasts found for this user" });
+    if (!podcasts.length) {
+      return res.status(404).json({ message: "No podcasts found", success: false });
     }
 
-    console.log(`Found ${podcasts.length} podcasts for user: ${userId}`);
-    res.status(200).json(podcasts);
+    res.status(200).json({ success: true, podcasts });
   } catch (error) {
-    console.error("❌ Error fetching user podcasts:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error fetching podcasts:", error);
+    res.status(500).json({ message: "Internal Server Error", success: false });
   }
 });
 
 
-
-
-// ---------------- GET ALL PODCASTS (GLOBAL LIBRARY) ----------------
-app.get("/getAllPodcasts", async (req, res) => {
-  try {
-    const podcasts = await Podcast.find();
-    res.status(200).json(podcasts);
-  } catch (error) {
-    console.error("Error fetching global podcasts:", error);
-    res.status(500).json({ message: "Error fetching global podcasts" });
-  }
-});
 
 // ---------------- SERVER LISTENING ----------------
 app.listen(port, () => console.log(`Server started on port ${port}`));
