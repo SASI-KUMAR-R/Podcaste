@@ -1,23 +1,95 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "./Navbar";
+import { useUser } from "../FunctionComponents/UserContext"; // Import user context
 import "../CSS/YourLibraryHome.css";
 
 function YourLibraryHome() {
+  const { user } = useUser();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [podcasts, setPodcasts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchUserPodcasts = async () => {
+      // ✅ Debugging log to check if user ID exists
+      console.log("User ID from context:", user?.userid);
+
+      if (!user?.userid) {
+        setError("User ID not found. Please log in.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `https://test-podcast.onrender.com/getUserPodcasts/${user.userid}`
+        );
+        setPodcasts(response.data);
+        setError(""); // Clear error if request is successful
+      } catch (error) {
+        console.error("Error fetching user podcasts:", error);
+        setError("Failed to fetch your podcasts. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserPodcasts();
+  }, [user?.userid]); // ✅ Added correct dependency to avoid unnecessary calls
+
+  // ✅ Filter podcasts based on search
+  const filteredPodcasts = podcasts.filter((podcast) =>
+    podcast.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleDetailPage = (id) => {
+    navigate(`/userdetail/${id}`);
+  };
+
   return (
     <div>
-      <Navbar />
+      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> {/* ✅ Pass search props */}
       <div className="MAINDIVOFPOD">
         <div className="addpodcast">
           <h1>
-            <Link to="/addpod" className="lokshaa">ADD YOUR PODCAST</Link>
+            <Link to="/addpod" className="lokshaa">
+              ADD YOUR PODCAST
+            </Link>
           </h1>
         </div>
         <div className="deletepodcast">
           <h1>
-            <Link to="/deletepod" className="lokshaa2">DELETE YOUR PODCAST</Link>
+            <Link to="/deletepod" className="lokshaa2">
+              DELETE YOUR PODCAST
+            </Link>
           </h1>
         </div>
+
+        {loading ? (
+          <p>Loading podcasts...</p>
+        ) : error ? (
+          <p className="error-message">{error}</p> // ✅ Show error message
+        ) : podcasts.length > 0 ? (
+          <div className="main">
+            {filteredPodcasts.map((podcast) => (
+              <div className="audio" key={podcast._id} onClick={() => handleDetailPage(podcast._id)}>
+                <img
+                  src={`data:image/png;base64,${podcast.image}`}
+                  alt={podcast.title}
+                />
+                <h2>{podcast.title}</h2>
+                <p>{podcast.description}</p>
+                <Link to={`/detail/${podcast._id}`}>View Details</Link>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>You haven't added any podcasts yet.</p>
+        )}
       </div>
     </div>
   );

@@ -108,14 +108,23 @@ app.get("/getUserPodcasts/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
 
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
     const podcasts = await Podcast.find({ userid: userId });
+
+    if (!podcasts.length) {
+      return res.status(404).json({ message: "No podcasts found for this user" });
+    }
 
     res.status(200).json(podcasts);
   } catch (error) {
     console.error("Error fetching user podcasts:", error);
-    res.status(500).json({ message: "Error fetching user podcasts" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 // ---------------- GET ALL PODCASTS (GLOBAL LIBRARY) ----------------
 app.get("/getAllPodcasts", async (req, res) => {
