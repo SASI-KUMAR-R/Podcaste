@@ -4,10 +4,8 @@ const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
 const multer = require("multer");
-
 const app = express();
 const port = 3001;
-
 app.use(cors());
 dotenv.config();
 app.use(express.json());
@@ -107,23 +105,29 @@ app.post(
 app.get("/getUserPodcasts/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
+    
+    console.log("Received API request for user ID:", userId); // Debugging log
 
     if (!userId) {
+      console.log("No user ID received");
       return res.status(400).json({ message: "User ID is required" });
     }
 
     const podcasts = await Podcast.find({ userid: userId });
 
-    if (!podcasts.length) {
+    if (podcasts.length === 0) {
+      console.log(`No podcasts found for user: ${userId}`);
       return res.status(404).json({ message: "No podcasts found for this user" });
     }
 
+    console.log(`Found ${podcasts.length} podcasts for user: ${userId}`);
     res.status(200).json(podcasts);
   } catch (error) {
-    console.error("Error fetching user podcasts:", error);
+    console.error("❌ Error fetching user podcasts:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 
 

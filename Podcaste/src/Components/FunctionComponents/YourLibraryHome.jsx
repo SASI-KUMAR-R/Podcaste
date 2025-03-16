@@ -14,26 +14,22 @@ function YourLibraryHome() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    console.log("User ID from context:", user?.userid); // Debugging log
+  
     const fetchUserPodcasts = async () => {
-      console.log("User ID from context:", user?.userid);
-
       if (!user?.userid) {
+        console.error("User ID is missing. Cannot fetch podcasts.");
         setError("User ID not found. Please log in.");
         setLoading(false);
         return;
       }
-
+  
       try {
         const response = await axios.get(
           `https://test-podcast.onrender.com/getUserPodcasts/${user.userid}`
         );
-
-        if (response.data.length === 0) {
-          setError("You haven't added any podcasts yet.");
-        } else {
-          setPodcasts(response.data);
-          setError("");
-        }
+        console.log("API Response:", response.data); // Debugging log
+        setPodcasts(response.data);
       } catch (error) {
         console.error("Error fetching user podcasts:", error);
         setError("Failed to fetch your podcasts. Please try again later.");
@@ -41,9 +37,10 @@ function YourLibraryHome() {
         setLoading(false);
       }
     };
-
+  
     fetchUserPodcasts();
-  }, [user?.userid]);
+  }, [user]);
+  
 
   const filteredPodcasts = podcasts.filter((podcast) =>
     podcast.title.toLowerCase().includes(searchTerm.toLowerCase())
