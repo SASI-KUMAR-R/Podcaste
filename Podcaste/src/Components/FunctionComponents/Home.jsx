@@ -18,7 +18,7 @@ function Home() {
         </h2>
         <h2>
           GO TO{" "}
-          <Link to="/pod" className="TAGA">
+          <Link to="/libhome" className="TAGA">
             YOUR LIBRARY
           </Link>
         </h2>

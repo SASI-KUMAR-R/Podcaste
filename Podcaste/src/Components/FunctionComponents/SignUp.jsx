@@ -14,7 +14,7 @@ const SignUp = () => {
   const handleSignup = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("https://podcaste-giuk.onrender.com/signup", {
+      const response = await axios.post("https://test-podcast.onrender.com/signup", {
         username: userName,
         emailid: emailid,
         password: password,
@@ -59,7 +59,7 @@ const SignUp = () => {
         <div className="logindiv">
           <p>Already a Account Holder??</p>
           <Link to="/" className="Linktag">
-            Login
+            Go To Login
           </Link>
         </div>
       </div>
