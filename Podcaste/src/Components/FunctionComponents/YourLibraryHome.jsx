@@ -6,7 +6,7 @@ import { useUser } from "../FunctionComponents/UserContext";  // Assuming user c
 import "../CSS/YourLibraryHome.css";
 
 function YourLibraryHome() {
-  const { user } = useUser();  // Get logged-in user info
+  const { user } = useUser();  
   const [podcasts, setPodcasts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -59,9 +59,9 @@ function YourLibraryHome() {
         ) : error ? (
           <p className="error">{error}</p>
         ) : podcasts.length > 0 ? (
-          <div className="podcastGrid">
+          <div className="main">
             {podcasts.map((podcast) => (
-              <div key={podcast._id} className="podcastCard">
+              <div key={podcast._id} className="audio">
                 <img src={`data:image/png;base64,${podcast.image}`} alt={podcast.title} />
                 <h3>{podcast.title}</h3>
                 <p>{podcast.description}</p>
